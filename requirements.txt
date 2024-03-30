@@ -1,0 +1,3 @@
+dns-python==1.16.0
+requests==2.26.0
+python-whois==0.7.3
