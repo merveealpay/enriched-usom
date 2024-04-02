@@ -20,18 +20,57 @@ def find_similar_iocs(domain):
         a_records = resolver.resolve(domain, 'A')
         ip_addresses = [record.to_text() for record in a_records]
 
+        ptr_records = []
         for ip_address in ip_addresses:
-            ptr_records = resolver.resolve(ip_address, 'PTR')
-            for ptr_record in ptr_records:
-                similar_domain = ptr_record.to_text()
-                if similar_domain != domain:
-                    print(f"Similar IOC found: {similar_domain}")
+            ptr_records.extend(resolver.resolve(ip_address, 'PTR'))
+
+        for ptr_record in ptr_records:
+            similar_domain = ptr_record.to_text()
+            if similar_domain != domain:
+                print(f"Similar IOC found: {similar_domain}")
+
+        # Pasif DNS analizi sadece DNS kaydı bulunan alan adları için yapılıyor
+        passive_dns_analysis(domain)
     except dns.resolver.NoAnswer:
         print(f"DNS record not found: {domain}")
     except dns.resolver.NXDOMAIN:
         print(f"DNS record not found: {domain}")
     except dns.resolver.Timeout:
         print(f"DNS resolution timed out for domain: {domain}.")
+
+
+def passive_dns_analysis(domain):
+    try:
+        resolver = dns.resolver.Resolver()
+        resolver.timeout = 5
+        resolver.lifetime = 5
+
+        now = datetime.datetime.now()
+        week_ago = now - datetime.timedelta(days=7)
+
+        url = f"https://www.virustotal.com/api/v3/domains/{domain}/passive_dns"
+        headers = {
+            "x-apikey": "YOUR_API_KEY"
+            "Content-Type": "application/json"
+        }
+        response = requests.get(url, headers=headers)
+
+        if response.status_code == 200:
+            data = response.json()
+            if 'data' in data:
+                dns_records = data['data']
+                for record in dns_records:
+                    last_resolved = datetime.datetime.strptime(record['attributes']['last_resolved'],
+                                                               '%Y-%m-%dT%H:%M:%SZ')
+                    if last_resolved >= week_ago:
+                        print(
+                            f"IP Address: {record['attributes']['ip_address']}, Last Resolved: {record['attributes']['last_resolved']}")
+            else:
+                print("No passive DNS records found.")
+        else:
+            print(f"No passive DNS records found for domain: {domain}")
+    except Exception as e:
+        print(f"Error occurred while fetching passive DNS records: {e}")
 
 
 def perform_whois_analysis(domain):
@@ -62,11 +101,6 @@ def perform_whois_analysis(domain):
     with open(output_file, "a") as file:
         file.write(f"Domain: {domain}\n")
         file.write(f"WHOIS Info: {whois_info}\n\n")
-
-def passive_dns_analysis(domain):
-    now = datetime.datetime.now()
-    delta = datetime.timedelta(days=7)
-    week_ago = now - delta
 
 
 for ioc in ioc_list:

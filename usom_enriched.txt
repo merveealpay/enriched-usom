@@ -1,79 +1,122 @@
-Domain: erenokyaltrk.online
+Domain: my-tr-petrolleri.com
 WHOIS Info: {
-  "domain_name": "ERENOKYALTRK.ONLINE",
+  "domain_name": [
+    "MY-TR-PETROLLERI.COM",
+    "my-tr-petrolleri.com"
+  ],
+  "registrar": "MainReg INC.",
+  "whois_server": "whois.mainreg.com",
+  "referral_url": null,
+  "updated_date": [
+    "2024-04-02 17:02:04",
+    "2024-04-02 00:00:00"
+  ],
+  "creation_date": [
+    "2024-04-02 14:14:02",
+    "2024-04-02 00:00:00"
+  ],
+  "expiration_date": [
+    "2025-04-02 14:14:02",
+    "2025-04-02 00:00:00"
+  ],
+  "name_servers": [
+    "CHIN.NS.CLOUDFLARE.COM",
+    "MALCOLM.NS.CLOUDFLARE.COM",
+    "chin.ns.cloudflare.com",
+    "malcolm.ns.cloudflare.com"
+  ],
+  "status": [
+    "ok https://icann.org/epp#ok",
+    "ok https://www.icann.org/epp#ok"
+  ],
+  "emails": [
+    "complain@mainreg.com",
+    "my-tr-petrolleri.com@whoisprotection.domains"
+  ],
+  "dnssec": "unsigned",
+  "name": "Domain Admin",
+  "org": "Whois protection, this company does not own this domain name s.r.o.",
+  "address": "Jaurisova 515/4",
+  "city": "Praha 4",
+  "state": null,
+  "registrant_postal_code": "14000",
+  "country": "CZ"
+}
+
+Domain: baayramfirsatlari.online
+WHOIS Info: {
+  "domain_name": "BAAYRAMFIRSATLARI.ONLINE",
   "domain__id": [
-    "D436845534-CNIC",
+    "D444538296-CNIC",
     "Not Available From Registry"
   ],
-  "whois_server": "whois.reg2c.com",
-  "registrar": "Turkticaret.net",
+  "whois_server": "whois.hostinger.com",
+  "registrar": "Hostinger Operations, UAB",
   "registrar_id": [
-    "819",
-    "H139306579"
+    "1636",
+    "H2712453"
   ],
   "registrar_url": [
-    "http://www.turkticaret.net",
-    "http://www.reg2c.com"
+    "https://www.hostinger.com/",
+    "https://www.hostinger.com"
   ],
   "status": [
     "serverTransferProhibited https://icann.org/epp#serverTransferProhibited",
-    "clientTransferProhibited https://icann.org/epp#clientTransferProhibited"
+    "clientTransferProhibited https://icann.org/epp#clientTransferProhibited",
+    "addPeriod https://icann.org/epp#addPeriod"
   ],
   "registrant_email": [
     "Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant, Admin, or Tech contact of the queried domain name.",
-    "gdpr-masking@gdpr-masked.com"
+    "contact@privacyprotect.org"
   ],
   "admin_email": [
     "Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant, Admin, or Tech contact of the queried domain name.",
-    "gdpr-masking@gdpr-masked.com"
+    "contact@privacyprotect.org"
   ],
   "billing_email": "Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant, Admin, or Tech contact of the queried domain name.",
   "tech_email": [
     "Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant, Admin, or Tech contact of the queried domain name.",
-    "gdpr-masking@gdpr-masked.com"
+    "contact@privacyprotect.org"
   ],
   "name_servers": [
-    "WALK.NS.CLOUDFLARE.COM",
-    "ELLIOTT.NS.CLOUDFLARE.COM",
-    "elliott.ns.cloudflare.com",
-    "walk.ns.cloudflare.com"
+    "NS2.DNS-PARKING.COM",
+    "NS1.DNS-PARKING.COM",
+    "ns1.dns-parking.com",
+    "ns2.dns-parking.com"
   ],
-  "creation_date": "2024-02-29 11:58:49",
-  "expiration_date": "2025-02-28 23:59:59",
-  "updated_date": [
-    "2024-03-05 12:02:39",
-    "2024-02-29 12:10:59"
-  ],
+  "creation_date": "2024-04-02 16:25:19",
+  "expiration_date": "2025-04-02 23:59:59",
+  "updated_date": "2024-04-02 16:25:24",
   "dnssec": [
     "unsigned",
     "Unsigned"
   ]
 }
 
-Domain: cumartesi-ramazan.com
+Domain: bncseduyurugiristr.com
 WHOIS Info: {
   "domain_name": [
-    "CUMARTESI-RAMAZAN.COM",
-    "cumartesi-ramazan.com"
+    "BNCSEDUYURUGIRISTR.COM",
+    "bncseduyurugiristr.com"
   ],
   "registrar": "GoDaddy.com, LLC",
   "whois_server": "whois.godaddy.com",
   "referral_url": null,
   "updated_date": [
-    "2024-03-30 12:26:55",
-    "2024-03-30 07:26:55"
+    "2024-04-02 17:06:19",
+    "2024-04-02 12:04:12"
   ],
   "creation_date": [
-    "2024-03-30 12:26:54",
-    "2024-03-30 07:26:54"
+    "2024-04-02 17:04:12",
+    "2024-04-02 12:04:12"
   ],
   "expiration_date": [
-    "2025-03-30 12:26:54",
-    "2025-03-30 07:26:54"
+    "2025-04-02 17:04:12",
+    "2025-04-02 12:04:12"
   ],
   "name_servers": [
-    "NS41.DOMAINCONTROL.COM",
-    "NS42.DOMAINCONTROL.COM"
+    "BOWEN.NS.CLOUDFLARE.COM",
+    "MELINA.NS.CLOUDFLARE.COM"
   ],
   "status": [
     "clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited",
@@ -93,5 +136,44 @@ WHOIS Info: {
   "state": "Arizona",
   "registrant_postal_code": "85284",
   "country": "US"
+}
+
+Domain: destykiralama.online
+WHOIS Info: {
+  "domain_name": "DESTYKIRALAMA.ONLINE",
+  "domain__id": "D444013494-CNIC",
+  "whois_server": "whois-service.virtualcloud.co",
+  "registrar": "SAV.COM, LLC",
+  "registrar_id": "609",
+  "registrar_url": "https://www.sav.com/",
+  "status": [
+    "serverTransferProhibited https://icann.org/epp#serverTransferProhibited",
+    "clientTransferProhibited https://icann.org/epp#clientTransferProhibited",
+    "addPeriod https://icann.org/epp#addPeriod"
+  ],
+  "registrant_email": [
+    "Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant, Admin, or Tech contact of the queried domain name.",
+    "Select Contact Domain Holder Link https://privacy.sav.com/?domain=destykiralama.online"
+  ],
+  "admin_email": [
+    "Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant, Admin, or Tech contact of the queried domain name.",
+    "Select Contact Domain Holder Link https://privacy.sav.com/?domain=destykiralama.online"
+  ],
+  "billing_email": "Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant, Admin, or Tech contact of the queried domain name.",
+  "tech_email": [
+    "Please query the RDDS service of the Registrar of Record identified in this output for information on how to contact the Registrant, Admin, or Tech contact of the queried domain name.",
+    "Select Contact Domain Holder Link https://privacy.sav.com/?domain=destykiralama.online"
+  ],
+  "name_servers": [
+    "DALE.NS.CLOUDFLARE.COM",
+    "SHAZ.NS.CLOUDFLARE.COM"
+  ],
+  "creation_date": "2024-03-31 23:09:01",
+  "expiration_date": "2025-03-31 23:59:59",
+  "updated_date": [
+    "2024-03-31 23:09:37",
+    "2024-04-01 09:54:50"
+  ],
+  "dnssec": "unsigned"
 }
 
