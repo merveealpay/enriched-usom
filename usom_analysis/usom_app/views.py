@@ -1,17 +1,11 @@
+from django.shortcuts import render
+from django.http import HttpResponse
+from .forms import DomainIPForm
 import requests
 import whois
 import re
 import dns.resolver
 import datetime
-
-url = "https://usom.gov.tr/url-list.txt"
-
-response = requests.get(url)
-
-ioc_list = response.text.splitlines()
-
-output_file = "usom_enriched.txt"
-
 
 def find_similar_iocs(domain):
     try:
@@ -27,17 +21,17 @@ def find_similar_iocs(domain):
         for ptr_record in ptr_records:
             similar_domain = ptr_record.to_text()
             if similar_domain != domain:
-                print(f"Similar IOC found: {similar_domain}")
+                x = f"Similar IOC found: {similar_domain}"
 
         # Pasif DNS analizi sadece DNS kaydı bulunan alan adları için yapılıyor
         passive_dns_analysis(domain)
+        return x, passive_dns_analysis(domain)
     except dns.resolver.NoAnswer:
-        print(f"DNS record not found: {domain}")
+        return f"DNS record not found: {domain}"
     except dns.resolver.NXDOMAIN:
-        print(f"DNS record not found: {domain}")
+        return f"DNS record not found: {domain}"
     except dns.resolver.Timeout:
-        print(f"DNS resolution timed out for domain: {domain}.")
-
+        return f"DNS resolution timed out for domain: {domain}."
 
 def passive_dns_analysis(domain):
     try:
@@ -63,26 +57,22 @@ def passive_dns_analysis(domain):
                     last_resolved = datetime.datetime.strptime(record['attributes']['last_resolved'],
                                                                '%Y-%m-%dT%H:%M:%SZ')
                     if last_resolved >= week_ago:
-                        print(
-                            f"IP Address: {record['attributes']['ip_address']}, Last Resolved: {record['attributes']['last_resolved']}")
+                        return f"IP Address: {record['attributes']['ip_address']}, Last Resolved: {record['attributes']['last_resolved']}"
             else:
-                print("No passive DNS records found.")
+                return "No passive DNS records found."
         else:
-            print(f"No passive DNS records found for domain: {domain}")
+            return f"No passive DNS records found for domain: {domain}"
     except Exception as e:
-        print(f"Error occurred while fetching passive DNS records: {e}")
+        return f"Error occurred while fetching passive DNS records: {e}"
 
-
-def perform_whois_analysis(domain):
-    whois_info = whois.whois(domain)
-
-    if whois_info is None:
-        print(f"WHOIS information not available for domain: {domain}")
-        return
-
+def perform_whois_analysis(domain, ioc_list, analysis_results=None):
+    try:
+        whois_info = whois.whois(domain)
+    except whois.parser.PywhoisError:
+        return f"WHOIS information couldn't be retrieved: {domain}"
+    similar_ioc_list = []
     if all(value is None for value in whois_info.values()):
-        print(f"No WHOIS information available for domain: {domain}")
-        return
+        return f"No WHOIS information available for domain: {domain}"
 
     common_criteria = [
         'registrant',
@@ -97,22 +87,32 @@ def perform_whois_analysis(domain):
                     escaped_ioc = re.escape(ioc)
                     if re.search(escaped_ioc, str(whois_entry), re.IGNORECASE):
                         print(f"Similar WHOIS entry found for IOC: {ioc}")
+                        similar_ioc_list.append(ioc)
 
-    with open(output_file, "a") as file:
-        file.write(f"Domain: {domain}\n")
-        file.write(f"WHOIS Info: {whois_info}\n\n")
+    if whois_info is not None:
+        analysis_results.append({
+            "domain": domain,
+            "whois_info": whois_info,
+            "similar_ioc": "Simillar WHOIS entry found for IOC: {}".format(similar_ioc_list)
+        })
+        return analysis_results
 
 
-for ioc in ioc_list:
+def index(request):
+    if request.method == 'POST':
+        form = DomainIPForm(request.POST)
+        if form.is_valid():
+            domain = form.cleaned_data['domain']
+            ip = form.cleaned_data['ip']
+            url = "https://usom.gov.tr/url-list.txt"
+            response = requests.get(url)
+            ioc_list = response.text.splitlines()
+            analysis_results = []
+            a = perform_whois_analysis(domain, ioc_list, analysis_results)
+            b = find_similar_iocs(domain)
+            c = passive_dns_analysis(domain)
+            return HttpResponse(f"Pivotlama işlemi tamamlandı, sonuçlar:<br>{a}<br>{b}<br>{c}")
+    else:
+        form = DomainIPForm()
 
-    try:
-        domain = ioc.strip()
-        perform_whois_analysis(domain)
-    except whois.parser.PywhoisError:
-        print(f"WHOIS information couldn't be retrieved: {domain}")
-
-    find_similar_iocs(domain)
-
-    passive_dns_analysis(domain)
-
-print("Analysis completed. Results have been saved to", output_file, "file.")
+    return render(request, 'index.html', {'form': form})
