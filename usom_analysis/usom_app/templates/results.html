@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Analysis Results</h1>
+        <div class="mt-4">
+            <h2>WHOIS Analysis</h2>
+            {% for result in a %}
+                <h3>{{ result.domain }}</h3>
+                <p>Domain Name: {{ result.whois_info.domain_name }}</p>
+                <p>Registrar: {{ result.whois_info.registrar }}</p>
+                <p>Name Servers: {{ result.whois_info.name_servers }}</p>
+                <p>Creation Date: {{ result.whois_info.creation_date }}</p>
+                <p>Expiration Date: {{ result.whois_info.expiration_date }}</p>
+                <p>Similar IOC: {{ result.similar_ioc }}</p>
+            {% endfor %}
+        </div>
+        <div class="mt-4">
+            <h2>Similar IOCs</h2>
+            {% if b %}
+                {% for ioc in b %}
+                    <p>{{ ioc }}</p>
+                {% endfor %}
+            {% else %}
+                <p>No similar IOCs found.</p>
+            {% endif %}
+        </div>
+        <div class="mt-4">
+            <h2>Passive DNS Analysis</h2>
+            <p>{{ c }}</p>
+        </div>
+    </div>
+</body>
+</html>
