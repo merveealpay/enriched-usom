@@ -3,37 +3,55 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.http import StreamingHttpResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from .models import DomainIP
 from .forms import DomainIPForm
 import requests
 import whois
 import re
 import dns.resolver
 import datetime
+from concurrent.futures import ThreadPoolExecutor
 
-def get_whois_info(domain):
-    try:
-        whois_info = whois.whois(domain)
-        return whois_info
-    except whois.parser.PywhoisError:
-        return None
+
+def get_whois_info(domain, cache):
+    if domain not in cache:
+        try:
+            whois_info = whois.whois(domain)
+            cache[domain] = whois_info
+        except whois.parser.PywhoisError:
+            cache[domain] = None
+    return cache[domain]
+
 
 def compare_whois_info(whois_info1, whois_info2):
     common_criteria = ['name_servers']
     for criteria in common_criteria:
         if whois_info1 is not None and whois_info2 is not None:
-            if criteria in whois_info1 and whois_info1[criteria] is not None and criteria in whois_info2 and whois_info2[criteria] is not None:
+            if criteria in whois_info1 and whois_info1[criteria] is not None and criteria in whois_info2 and \
+                    whois_info2[criteria] is not None:
                 if set(whois_info1[criteria]) & set(whois_info2[criteria]):
                     return True
     return False
 
+
 def find_similar_iocs(ioc_list, target_domain):
-    target_whois_info = get_whois_info(target_domain)
-    for ioc in ioc_list:
-        if ioc != target_domain:
-            whois_info = get_whois_info(ioc)
-            if compare_whois_info(target_whois_info, whois_info):
-                yield ioc
+    whois_cache = {}
+    target_whois_info = get_whois_info(target_domain, whois_cache)
+    similar_ioc_found = False
+
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        for ioc in ioc_list:
+            if ioc != target_domain:
+                whois_info = executor.submit(get_whois_info, ioc, whois_cache).result()
+                if compare_whois_info(target_whois_info, whois_info):
+                    similar_ioc_found = True
+                    DomainIP.objects.create(domain=target_domain, ip='', whois_info=str(target_whois_info),
+                                            similar_iocs=str(ioc))
+                    yield ioc
+
+    if not similar_ioc_found:
+        yield "No similar IOC found."
+
 
 def passive_dns_analysis(domain):
     try:
@@ -67,6 +85,7 @@ def passive_dns_analysis(domain):
     except Exception as e:
         return f"Error occurred while fetching passive DNS records: {e}"
 
+
 def perform_whois_analysis(domain, ioc_list, analysis_results=None):
     try:
         whois_info = whois.whois(domain)
@@ -99,6 +118,7 @@ def perform_whois_analysis(domain, ioc_list, analysis_results=None):
         })
         return analysis_results
 
+
 @csrf_exempt
 def stream_response(request):
     def content_generator():
@@ -113,16 +133,10 @@ def stream_response(request):
             a = perform_whois_analysis(domain, ioc_list, analysis_results)
             c = passive_dns_analysis(domain)
 
-            # Write the initial part of the response
-            yield render_to_string('results.html', {'a': a, 'c': c, 'b': []})
+            similar_iocs = find_similar_iocs(ioc_list, domain)  # Benzer IOC'leri bul
 
-            # Stream the results of find_similar_iocs
-            similar_iocs = []
-            for ioc in find_similar_iocs(ioc_list, domain):
-                similar_iocs.append(ioc)
-                yield render_to_string('results.html', {'b': similar_iocs})  # Pass the entire list of similar IOCs
+            yield render_to_string('results.html', {'a': a, 'c': c, 'b': similar_iocs})
 
-        # Render the form for GET requests
         else:
             yield render_to_string('index.html', {'form': form})
 

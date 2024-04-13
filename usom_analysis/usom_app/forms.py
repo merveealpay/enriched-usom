@@ -11,4 +11,4 @@ class DomainIPForm(forms.Form):
         ip = cleaned_data.get('ip')
 
         if not domain and not ip:
-            raise ValidationError("At least one of Domain or IP must be filled.")
+            raise ValidationError("Please fill at least one of Domain or IP.")
